@@ -1,0 +1,10 @@
+PODS:
+  - Metawear-iOSAPI (1.5.3)
+
+DEPENDENCIES:
+  - Metawear-iOSAPI
+
+SPEC CHECKSUMS:
+  Metawear-iOSAPI: 4804cdadb6e2ce87a129906bffe4f2c32dd19c19
+
+COCOAPODS: 0.36.0
