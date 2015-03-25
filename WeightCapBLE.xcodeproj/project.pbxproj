@@ -41,6 +41,7 @@
 		F7C3E3841AC319B000F8F9BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F7C3E3851AC319B000F8F9BD /* WeightCapBLETests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightCapBLETests.swift; sourceTree = "<group>"; };
 		F7F3EE4D1AC320C5009C58FC /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/../build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
+		F7FCDEA71AC33ADD00ECE67E /* WeightCapBLE-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WeightCapBLE-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +106,7 @@
 			children = (
 				F7C3E36F1AC319B000F8F9BD /* AppDelegate.swift */,
 				F7C3E3711AC319B000F8F9BD /* ViewController.swift */,
+				F7FCDEA71AC33ADD00ECE67E /* WeightCapBLE-Bridging-Header.h */,
 				F7C3E3731AC319B000F8F9BD /* Main.storyboard */,
 				F7C3E3761AC319B000F8F9BD /* Images.xcassets */,
 				F7C3E3781AC319B000F8F9BD /* LaunchScreen.xib */,
