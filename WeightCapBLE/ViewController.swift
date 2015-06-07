@@ -43,7 +43,7 @@ class ViewController: UIViewController {
                 
 //                self.getAmbientTemp()
                 
-//                self.streamRMSData()
+                self.streamRMSData()
             }
             
             let config = self.device.configuration
@@ -60,11 +60,14 @@ class ViewController: UIViewController {
     }
     
     func streamRMSData() {
-        self.device.accelerometer.fullScaleRange = MBLAccelerometerRange(2)        
-        self.device.accelerometer.filterCutoffFreq = 0
-        self.device.accelerometer.highPassFilter = true
-//        self.device.accelerometer.lowNoise = true
-        self.device.accelerometer.sampleFrequency = MBLAccelerometerSampleFrequency(100)
+        if device.accelerometer.isKindOfClass(MBLAccelerometerMMA8452Q) {
+            let accelerometer = self.device.accelerometer as! MBLAccelerometerMMA8452Q
+            
+            accelerometer.sampleFrequency = 100
+            accelerometer.fullScaleRange = MBLAccelerometerRange(rawValue: 2)!
+            accelerometer.highPassCutoffFreq = MBLAccelerometerCutoffFreq(rawValue: 0)!
+            accelerometer.highPassFilter = true
+        }
         
 //        self.device.accelerometer.dataReadyEvent.startNotificationsWithHandler() {
 //            (obj, error) -> Void in println("Raw Data: \(obj)")
