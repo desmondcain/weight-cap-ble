@@ -33,11 +33,14 @@
  * contact MbientLab Inc, at www.mbientlab.com.
  */
 
-#import <MetaWear/MBLLogEntry.h>
+#import <MetaWear/MBLDataSample.h>
 
 /**
- Generic base class for numeric data coming from the MetaWear log
+ All MetaWear data that can be represented as a number
  */
-@interface MBLNumericData : MBLLogEntry
+@interface MBLNumericData : MBLDataSample
+/**
+ Value of the numeric data
+ */
 @property (nonatomic, strong, readonly) NSNumber *value;
 @end

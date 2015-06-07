@@ -38,6 +38,7 @@
 /**
  Generic base class for data coming from the MetaWear log
  */
+DEPRECATED_MSG_ATTRIBUTE("This was renamed to MBLDataSample, as it's used as a base class for logging and notifications now")
 @interface MBLLogEntry : NSObject
 @property (nonatomic, strong, readonly) NSDate *timestamp;
 @property (nonatomic, strong, readonly) NSData *data;

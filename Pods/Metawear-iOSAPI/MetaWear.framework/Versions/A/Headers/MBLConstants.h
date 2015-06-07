@@ -76,3 +76,9 @@ extern NSInteger const kMBLErrorInvalidMetaWearObject;
 
 /*! @abstract 104: MetaWear not charged enough for firmware update */
 extern NSInteger const kMBLErrorInsufficientCharge;
+
+/*! @abstract 105: MetaWear firmware version too old */
+extern NSInteger const kMBLErrorOutdatedFirmware;
+
+/*! @abstract 106: Unexpected disconnect during a connection */
+extern NSInteger const kMBLErrorUnexpectedDisconnect;

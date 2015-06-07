@@ -36,6 +36,9 @@
 #import <MetaWear/MBLNeopixel.h>
 #import <UIKit/UIKit.h>
 
+/**
+ Interface to a strand of NeoPixels
+ */
 @interface MBLNeopixelStrand : NSObject <NSCoding>
 
 /**

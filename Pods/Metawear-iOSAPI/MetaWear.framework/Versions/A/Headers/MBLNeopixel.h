@@ -42,7 +42,7 @@
 /**
  Coloring ordering of the NeoPixel strand (depends on the LED driver chip)
  */
-typedef NS_OPTIONS(uint8_t, MBLColorOrdering) {
+typedef NS_ENUM(uint8_t, MBLColorOrdering) {
     MBLColorOrderingRGB = 0,
     MBLColorOrderingRBG = 1,
     MBLColorOrderingGRB = 2,
@@ -52,7 +52,7 @@ typedef NS_OPTIONS(uint8_t, MBLColorOrdering) {
 /**
  Speed of the NeoPixel strand (depends on the LED driver chip)
  */
-typedef NS_OPTIONS(uint8_t, MBLStrandSpeed) {
+typedef NS_ENUM(uint8_t, MBLStrandSpeed) {
     MBLStrandSpeedSlow = 0,
     MBLStrandSpeedFast = 1
 };
@@ -60,7 +60,7 @@ typedef NS_OPTIONS(uint8_t, MBLStrandSpeed) {
 /**
  Direction the pixel colors shift during rotation
  */
-typedef NS_OPTIONS(uint8_t, MBLRotationDirection) {
+typedef NS_ENUM(uint8_t, MBLRotationDirection) {
     MBLRotationDirectionTowardsBoard = 0,
     MBLRotationDirectionAwayFromBoard = 1
 };

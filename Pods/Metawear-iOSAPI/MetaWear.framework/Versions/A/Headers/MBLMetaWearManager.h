@@ -38,15 +38,30 @@
 
 
 /**
+ Valid Firmware Versions
+ */
+typedef NS_ENUM(uint8_t, MBLFirmwareVersion) {
+    MBLFirmwareVersion0_4_1,
+    MBLFirmwareVersion0_6_0,
+    MBLFirmwareVersion0_8_0,
+    MBLFirmwareVersion0_8_6,
+    MBLFirmwareVersion0_9_0,
+    MBLFirmwareVersion1_0_0,
+    MBLFirmwareVersion1_0_1,
+    MBLFirmwareVersion1_0_3
+};
+
+/**
  The MBLMetaWearManager is responsible for the scanning and discovery of MBLMetaWear devices.
  */
 @interface MBLMetaWearManager : NSObject
 
 /**
- If set to YES, an alert view box will pop up if a connected MetaWear is not
- on the latest firmware, otherwise no alert.
+ Set the minimum firmware version required to run your app.  If you attempt to connect
+ to a device with older firmware you will recieve a connection error.
+ This defaults to oldest firmware supported by this API.
  */
-@property (nonatomic) BOOL alertIfNewerFirmware;
+@property (nonatomic) MBLFirmwareVersion minimumRequiredVersion;
 
 ///----------------------------------
 /// @name Getting the Shared Instance

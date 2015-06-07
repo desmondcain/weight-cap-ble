@@ -39,7 +39,7 @@
 /**
  iBeacon transmiter power
  */
-typedef NS_OPTIONS(uint8_t, MBLiBeaconTransmitPower) {
+typedef NS_ENUM(uint8_t, MBLiBeaconTransmitPower) {
     MBLiBeaconTransmitPower4dBm,
     MBLiBeaconTransmitPower0dBm,
     MBLiBeaconTransmitPowerMinus4dBm,

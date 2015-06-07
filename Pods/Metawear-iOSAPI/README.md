@@ -1,6 +1,6 @@
 # MetaWear IOS API by MBIENTLAB
 
-<img src="http://mbientlab.com/metawear.png" alt="MetaWear" title="MetaWear" />
+![alt tag](https://github.com/mbientlab/Metawear-iOSAPI/blob/master/Images/Metawear.png)
 
 ### Overview
 
@@ -30,9 +30,10 @@ Reach out to the [community](http://community.mbientlab.com) if you encounter an
 
 If you are familiar with [CocoaPods](http://cocoapods.org/), you can use the pod named `'Metawear-iOSAPI'`.
 
-Otherwise, download this project.  The API is available as a Framework for iOS called the MetaWear.framework. You will see a few header files along with a framework file included in your download.  To install, simply drag the MetaWear.framework folder into your Xcode project.
+Otherwise, download this project.  The API is available as a Framework for iOS called the MetaWear.framework. You will see a few header files along with a framework file included in your download.  To install, simply drag the MetaWear.framework folder into your Xcode project.  For step by instructions see the [video guide](https://youtu.be/B9DQQATNoGk).
 
-<img src="http://mbientlab.com/FrameworkSetup.png" alt="FrameworkSetup" title="FrameworkSetup" />
+
+![alt tag](https://github.com/mbientlab/Metawear-iOSAPI/blob/master/Images/FrameworkSetup.png)
 
 ### Simple API Test
 
@@ -69,47 +70,6 @@ A sample iOS App using the MetaWear iOS API can be found at https://github.com/m
 
 The sample iOS App demonstrates the base functionality of the various MetaWear modules and serves as a good starting point for developers.
 
-## API Documentation
+### API Documentation
 
-### API Quickstart
-
-The core class is MBLMetaWear, it corresponds to a physical MetaWear board and contains pointers to encapsulated sensor and peripheral objects which perform the real life functions.  The MBLMetaWear objects are created by the MBLMetaWearManager, which scans for devices.
-
-<img src="http://mbientlab.com/MetaWearAPIQuickstart.png" alt="APIQuickstart" title="APIQuickstart" />
-
-You interact with the data produced by the sensors and peripherals through the MBLEvent class.
-
-<img src="http://mbientlab.com/MetaWearEventQuickstart.png" alt="EventQuickstart" title="EventQuickstart" />
-
-### Data Processing Module
-
-The data processing module is separated into several "filters" which can be used standalone or chained together to create more complex filters.
-
-The current filters available are:
-- Summation of Events
-- Periodic Sample of Events
-- Peak Detector (coming soon)
-- Low Pass Filter (coming soon)
-- Threshold Detector (coming soon)
-
-The generic nature of these filters allow you to give any data stream as input and receive the processed data as output, either directly or through a log entry.
-
-The following quick example shows how to setup this data processing chain to report the summed RMS value of accelerometer data every minute. This is currently used in the MetaTracker App (https://github.com/mbientlab/MetaTracker) to estimate overall activity in a given time interval.
-
-The following diagram describes the overall data gathering, processing, and storing that we want to achieve.
-
-![alt tag](https://github.com/mbientlab/Metawear-iOSAPI/blob/master/DataProcessing.jpeg)
-
-```obj-c
-MBLEvent *event = [self.device retrieveEventWithIdentifier:@"com.mbientlab.ActivityTrackerEvent"];
-if (!event) {
-    // Program to sum accelerometer RMS data and log sample every 60 seconds
-    event = [[self.device.accelerometer.rmsDataReadyEvent summationOfEvent] periodicSampleOfEvent:60000 identifier:@"com.mbientlab.ActivityTrackerEvent"];
-}
-if (!event.isLogging) {
-    self.device.accelerometer.fullScaleRange = MBLAccelerometerRange8G;
-    self.device.accelerometer.filterCutoffFreq = 0;
-    self.device.accelerometer.highPassFilter = YES;
-    [event startLogging];
-}
-```
+See the [iOS Guide](http://docs.mbientlab.com/?page_id=15)

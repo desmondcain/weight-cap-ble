@@ -33,13 +33,13 @@
  * contact MbientLab Inc, at www.mbientlab.com.
  */
 
-#import <MetaWear/MBLLogEntry.h>
+#import <MetaWear/MBLDataSample.h>
 #import <MetaWear/MBLANCS.h>
 
 /**
  Data encapsulation for an ANCS event.
  */
-@interface MBLANCSEventData : MBLLogEntry
+@interface MBLANCSEventData : MBLDataSample
 
 /**
  This field informs whether the given iOS notification was added, modified, or removed

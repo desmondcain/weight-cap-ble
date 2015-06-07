@@ -42,40 +42,15 @@
 /**
  Temperature module sensor souce
  */
-typedef NS_OPTIONS(uint8_t, MBLTemperatureSource) {
+typedef NS_ENUM(uint8_t, MBLTemperatureSource) {
     MBLTemperatureSourceInternal,
     MBLTemperatureSourceThermistor
-};
-
-/**
- Temperature module unit selection
- */
-typedef NS_OPTIONS(uint8_t, MBLTemperatureUnit) {
-    MBLTemperatureUnitCelsius,
-    MBLTemperatureUnitFahrenheit
 };
 
 /**
  Interface to the on-chip and external thermistor temperature sensors
  */
 @interface MBLTemperature : MBLModule <NSCoding>
-
-/**
- Sampling period for temperature readings in mSec
- */
-@property (nonatomic) uint16_t samplePeriod;
-/**
- changeEvents occur when the temprature changes by this delta
- */
-@property (nonatomic) float delta;
-/**
- thresholdEvents occur when the temprature rises above or falls below this threshold
- */
-@property (nonatomic) float upperThreshold;
-/**
- thresholdEvents occur when the temprature rises above or falls below this threshold
- */
-@property (nonatomic) float lowerThreshold;
 
 /**
  Choose where temperature readings are taken from, note that MBLTemperatureSourceThermistor
@@ -92,37 +67,73 @@ typedef NS_OPTIONS(uint8_t, MBLTemperatureUnit) {
  */
 @property (nonatomic) uint8_t thermistorEnablePin;
 
-/**
- Choose between celsius and fahrenheit
- */
-@property (nonatomic) MBLTemperatureUnit units;
-
 
 /**
- Perform a one time read of the current device temperature
- @param handler Callback once temperature read is complete
+ Data representing the current temperate. Event callbacks will be 
+ provided an MBLNumericData object whose float value will be 
+ degrees Celsius.
  */
-- (void)readTemperatureWithHandler:(MBLDecimalNumberHandler)handler;
+@property (nonatomic, strong, readonly) MBLData *temperatureValue;
+
+
+///----------------------------------
+/// @name Deprecated Properties
+///----------------------------------
 
 /**
- Event representing a new temperature data sample. This event will
- occur every samplePeriod milliseconds. Event callbacks will be provided an
- NSDecimalNumber object.
+ @deprecated To simpliy use with filters, all temperature values will be in Celsius
  */
-@property (nonatomic, strong, readonly) MBLEvent *dataReadyEvent;
+DEPRECATED_MSG_ATTRIBUTE("To simpliy use with filters, all temperature values will be in Celsius")
+typedef NS_ENUM(uint8_t, MBLTemperatureUnit) {
+    MBLTemperatureUnitCelsius DEPRECATED_MSG_ATTRIBUTE("To simpliy use with filters, all temperature values will be in Celsius"),
+    MBLTemperatureUnitFahrenheit DEPRECATED_MSG_ATTRIBUTE("To simpliy use with filters, all temperature values will be in Celsius")
+};
 
 /**
- Event representing a temperature change by delta degrees. The temperature
- is checked against the delta every samplePeriod milliseconds.  Event callbacks
- will be provided an NSDecimalNumber object.
+ @deprecated To simpliy use with filters, all temperature values will be in Celsius
  */
-@property (nonatomic, strong, readonly) MBLEvent *changeEvent;
+@property (nonatomic) MBLTemperatureUnit units DEPRECATED_MSG_ATTRIBUTE("To simpliy use with filters, all temperature values will be in Celsius");
 
 /**
- Event representing a temperature threshold crossing. The temperature
- is checked against the threshold every samplePeriod milliseconds.  Event 
- callbacks will be provided an NSDecimalNumber object.
+ @deprecated use [temperatureValue periodicReadWithPeriod:] instead
  */
-@property (nonatomic, strong, readonly) MBLEvent *thresholdEvent;
+@property (nonatomic) uint16_t samplePeriod DEPRECATED_MSG_ATTRIBUTE("Use [temperatureValue periodicReadWithPeriod:] instead");
+/**
+ @deprecated use [[temperatureValue periodicReadWithPeriod:] changeOfEventByDelta:output:] instead
+ */
+@property (nonatomic) float delta DEPRECATED_MSG_ATTRIBUTE("Use [[temperatureValue periodicReadWithPeriod:] changeOfEventByDelta:output:] instead");
+/**
+ @deprecated use [[temperatureValue periodicReadWithPeriod:] changeOfEventAcrossThreshold:hysteresis:output:] instead
+ */
+@property (nonatomic) float upperThreshold DEPRECATED_MSG_ATTRIBUTE("Use [[temperatureValue periodicReadWithPeriod:] changeOfEventAcrossThreshold:hysteresis:output:] instead");
+/**
+ @deprecated use [[temperatureValue periodicReadWithPeriod:] changeOfEventAcrossThreshold:hysteresis:output:] instead
+ */
+@property (nonatomic) float lowerThreshold DEPRECATED_MSG_ATTRIBUTE("Use [[temperatureValue periodicReadWithPeriod:] changeOfEventAcrossThreshold:hysteresis:output:] instead");
+
+
+///----------------------------------
+/// @name Deprecated Methods
+///----------------------------------
+
+/**
+ @deprecated use [temperatureValue readWithHandler:] instead
+ */
+- (void)readTemperatureWithHandler:(MBLDecimalNumberHandler)handler DEPRECATED_MSG_ATTRIBUTE("Use [temperatureValue readWithHandler:] instead");
+
+/**
+ @deprecated use [temperatureValue periodicReadWithPeriod:] instead
+ */
+@property (nonatomic, strong, readonly) MBLEvent *dataReadyEvent DEPRECATED_MSG_ATTRIBUTE("Use [temperatureValue periodicReadWithPeriod:] instead");;
+
+/**
+ @deprecated use [[temperatureValue periodicReadWithPeriod:] changeOfEventByDelta:output:] instead
+ */
+@property (nonatomic, strong, readonly) MBLEvent *changeEvent DEPRECATED_MSG_ATTRIBUTE("Use [[temperatureValue periodicReadWithPeriod:] changeOfEventByDelta:output:] instead");
+
+/**
+ @deprecated use [[temperatureValue periodicReadWithPeriod:] changeOfEventAcrossThreshold:hysteresis:output:] instead
+ */
+@property (nonatomic, strong, readonly) MBLEvent *thresholdEvent DEPRECATED_MSG_ATTRIBUTE("Use [[temperatureValue periodicReadWithPeriod:] changeOfEventAcrossThreshold:hysteresis:output:] instead");
 
 @end

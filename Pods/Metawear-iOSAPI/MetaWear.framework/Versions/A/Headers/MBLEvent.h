@@ -43,7 +43,7 @@
 /**
  Supported Comparison filter operations
  */
-typedef NS_OPTIONS(uint8_t, MBLComparisonOperation) {
+typedef NS_ENUM(uint8_t, MBLComparisonOperation) {
     MBLComparisonOperationEqual = 0,
     MBLComparisonOperationNotEqual = 1,
     MBLComparisonOperationLessThan = 2,
@@ -55,7 +55,7 @@ typedef NS_OPTIONS(uint8_t, MBLComparisonOperation) {
 /**
  Supported Arithmetic filter operations
  */
-typedef NS_OPTIONS(uint8_t, MBLArithmeticOperation) {
+typedef NS_ENUM(uint8_t, MBLArithmeticOperation) {
     MBLArithmeticOperationNoOp = 0,
     MBLArithmeticOperationAdd = 1,
     MBLArithmeticOperationMultiply = 2,
@@ -64,16 +64,34 @@ typedef NS_OPTIONS(uint8_t, MBLArithmeticOperation) {
     MBLArithmeticOperationExponent = 5,
     MBLArithmeticOperationSquareRoot = 6,
     MBLArithmeticOperationLeftShift = 7,
-    MBLArithmeticOperationRightShift = 8
+    MBLArithmeticOperationRightShift = 8,
+    MBLArithmeticOperationSubtract = 9
 };
 
 /**
  Pluse filter output types
  */
-typedef NS_OPTIONS(uint8_t, MBLPulseOutput) {
+typedef NS_ENUM(uint8_t, MBLPulseOutput) {
     MBLPulseOutputWidth = 0,
     MBLPulseOutputArea = 1,
     MBLPulseOutputPeak = 2
+};
+
+/**
+ Delta value filter output types
+ */
+typedef NS_ENUM(uint8_t, MBLDeltaValueOutput) {
+    MBLDeltaValueOutputAbsolute = 0, // Output is Value
+    MBLDeltaValueOutputDifferential = 1, // Output is Delta From Last
+    MBLDeltaValueOutputBinary = 2 // Output is 1 if Increased, -1 if Decreased
+};
+
+/**
+ Threshold value filter output types
+ */
+typedef NS_ENUM(uint8_t, MBLThresholdValueOutput) {
+    MBLThresholdValueOutputAbsolute = 0, // Output is Value
+    MBLThresholdValueOutputBinary = 1, // Output is 1 rising edge, -1 if falling
 };
 
 /**
@@ -217,17 +235,25 @@ typedef NS_OPTIONS(uint8_t, MBLPulseOutput) {
 ///----------------------------------
 
 /**
- TODO: This can allow data to pass or not
+ Create a new event that allows input samples to pass or not. Event callbacks 
+ will be provided the same object as the input.
+ @param pass Initially allow samples to pass or not
+ @returns New event that conditionally represents the input
  */
 - (MBLDataSwitch *)conditionalDataSwitch:(BOOL)pass;
 
 /**
- TODO: This can allow X samples to pass
+ Create a new event that allows N input samples to pass to the output.
+ After N samples, no further events will be generated. Event callbacks
+ will be provided the same object as the input.
+ @param initialCount Number of samples to allow through
+ @returns New event representing N events of the input
  */
 - (MBLDataSwitch *)countingDataSwitch:(uint16_t)initialCount;
 
 /**
  Create a new event that accumulates the output data of the current event.
+ Event callbacks will be provided the same object as the input.
  @returns New event representing accumulated output
  */
 - (MBLFilter *)summationOfEvent;
@@ -235,6 +261,7 @@ typedef NS_OPTIONS(uint8_t, MBLPulseOutput) {
 /**
  Create a new event that averages the output data of the current event. This
  uses a recursive average technique so the answers are approximate.
+ Event callbacks will be provided the same object as the input.
  @param depth Number of samples to average (works fastest if a power of 2)
  @returns New event representing average of input
  */
@@ -242,16 +269,17 @@ typedef NS_OPTIONS(uint8_t, MBLPulseOutput) {
 
 /**
  Create a new event that compares the current event and passes through the
- value only if the comparision is true.
+ value only if the comparision is true.  Event callbacks will be provided 
+ the same object as the input.
  @param op Operation type to perform
  @parma data Value on the right hand side of the operation
  @returns New event representing input values that meet the comparison condition
  */
-- (MBLFilter *)compareEventUsingOperation:(MBLComparisonOperation)op withUnsignedData:(uint32_t)data;
-- (MBLFilter *)compareEventUsingOperation:(MBLComparisonOperation)op withSignedData:(int32_t)data;
+- (MBLFilter *)compareEventUsingOperation:(MBLComparisonOperation)op withData:(float)data;
 
 /**
  Create a new event that occurs at most once every period milliseconds.
+ Event callbacks will be provided the same object as the input.
  @param periodInMsec Sample period in msec
  @returns New event representing periodically sampled output
  */
@@ -260,37 +288,55 @@ typedef NS_OPTIONS(uint8_t, MBLPulseOutput) {
 /**
  Create a new event that represents the difference bettween the current event
  every periodInMsec milliseconds.  This acts a differential filter giving you
- the changed in value of a signal.
+ the changed in value of a signal.  Event callbacks will be provided the same 
+ object as the input.
  @param periodInMsec Sample period in msec
  @returns New event representing differential output
  */
 - (MBLFilter *)differentialSampleOfEvent:(uint32_t)periodInMsec;
 
 /**
- Create a new event that performs an arithmetic operation on the current event
- @param op Operation type to perform
- @parma data Value on the right hand side of the operation
- @returns New event representing input values after the arithmetic operation
- */
-- (MBLFilter *)modifyEventUsingOperation:(MBLArithmeticOperation)op withUnsignedData:(uint32_t)data;
-- (MBLFilter *)modifyEventUsingOperation:(MBLArithmeticOperation)op withSignedData:(int32_t)data;
-
-/**
  Create a new event that delays the current even by a given number of samples.
+ Event callbacks will be provided the same object as the input.
  @param count Number of samples to delay
  @returns New event representing a delayed version of the input
  */
 - (MBLFilter *)delayOfEventWithCount:(uint8_t)count;
 
 /**
- Create a new event that represents a pulse of the input.
+ Create a new event that represents a pulse of the input.  A pulse event will be
+ generated when the input event crosses below threshold after first staying above
+ threshold for width samples.
+ If the output type is MBLPulseOutputArea or MBLPulseOutputPeak, then event 
+ callbacks will be provided the same object as the input. MBLPulseOutputWidth
+ output, however, will be provided MBLNumericData objects.
  @param threshold Min value considered to be a pulse
  @param width Number of samples input must stay above threshold to be considered a valid pulse
  @param output Select the type of data this filter should output
  @returns New event representing a pulse of the input
  */
-- (MBLFilter *)pulseDetectorOfEventWithThreshold:(int32_t)threshold width:(uint16_t)width output:(MBLPulseOutput)output;
+- (MBLFilter *)pulseDetectorOfEventWithThreshold:(float)threshold width:(uint16_t)width output:(MBLPulseOutput)output;
 
+/**
+ Create a new event that occurs when the given event changes by a specified delta.
+ If the output type is MBLDeltaValueOutputAbsolute or MBLDeltaValueOutputDifferential,
+ then event callbacks will be provided the same object as the input. MBLDeltaValueOutputBinary
+ output, however, will be provided MBLNumericData objects.
+ @param delta Magnitude of change that must occur for event to take place
+ @param output Select the type of data this filter should output
+ @returns New event representing a changed of the input
+ */
+- (MBLFilter *)changeOfEventByDelta:(float)delta output:(MBLDeltaValueOutput)output;
+
+/**
+ Create a new event that occurs when the given event crosses a specified threshold.
+ Event callbacks will be provided the same object as the input.
+ @param threshold Value the event must cross for event to take place
+ @param hysteresis Hysteresis on crossing to eliminate oscillation
+ @param output Select the type of data this filter should output
+ @returns New event representing a changed of the input
+ */
+- (MBLFilter *)changeOfEventAcrossThreshold:(float)threshold hysteresis:(float)hysteresis output:(MBLThresholdValueOutput)output;
 
 /**
  Create a new event that occurs at the same time of this event, but whose value is
@@ -307,11 +353,31 @@ typedef NS_OPTIONS(uint8_t, MBLPulseOutput) {
 /**
  * @deprecated create an id<MBLRestorable> object and use [MBLMetaWear setConfiguration:handler:] instead
  */
-- (MBLEvent *)periodicSampleOfEvent:(uint32_t)periodInMsec identifier:(NSString *)identifier DEPRECATED_MSG_ATTRIBUTE("Create an id<MBLRestorable> object and use [MBLMetaWear setConfiguration:handler:] instead");
+- (MBLFilter *)periodicSampleOfEvent:(uint32_t)periodInMsec identifier:(NSString *)identifier DEPRECATED_MSG_ATTRIBUTE("Create an id<MBLRestorable> object and use [MBLMetaWear setConfiguration:handler:] instead");
 
 /**
  * @deprecated create an id<MBLRestorable> object and use [MBLMetaWear setConfiguration:handler:] instead
  */
-- (MBLEvent *)summationOfEventWithIdentifier:(NSString *)identifier DEPRECATED_MSG_ATTRIBUTE("Create an id<MBLRestorable> object and use [MBLMetaWear setConfiguration:handler:] instead");
+- (MBLFilter *)summationOfEventWithIdentifier:(NSString *)identifier DEPRECATED_MSG_ATTRIBUTE("Create an id<MBLRestorable> object and use [MBLMetaWear setConfiguration:handler:] instead");
+
+/**
+ * @deprecated Use compareEventUsingOperation:withData: instead
+ */
+- (MBLFilter *)compareEventUsingOperation:(MBLComparisonOperation)op withUnsignedData:(uint32_t)data DEPRECATED_MSG_ATTRIBUTE("Use [compareEventUsingOperation:withData: instead");
+
+/**
+ * @deprecated Use compareEventUsingOperation:withData: instead
+ */
+- (MBLFilter *)compareEventUsingOperation:(MBLComparisonOperation)op withSignedData:(int32_t)data DEPRECATED_MSG_ATTRIBUTE("Use [compareEventUsingOperation:withData: instead");
+
+/**
+ * @deprecated
+ */
+- (MBLFilter *)modifyEventUsingOperation:(MBLArithmeticOperation)op withUnsignedData:(uint32_t)data DEPRECATED_ATTRIBUTE;
+
+/**
+ * @deprecated
+ */
+- (MBLFilter *)modifyEventUsingOperation:(MBLArithmeticOperation)op withSignedData:(int32_t)data DEPRECATED_ATTRIBUTE;
 
 @end

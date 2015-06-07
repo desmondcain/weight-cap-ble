@@ -33,30 +33,30 @@
  * contact MbientLab Inc, at www.mbientlab.com.
  */
 
-#import <MetaWear/MBLLogEntry.h>
+#import <MetaWear/MBLDataSample.h>
 
 /**
  Container for a single accelerometer sensor reading
  */
-@interface MBLAccelerometerData : MBLLogEntry
+@interface MBLAccelerometerData : MBLDataSample
 
 /**
- Acceleration along X axis in mili-G's
+ Acceleration along X axis in G's
  */
-@property (nonatomic, readonly) int x;
+@property (nonatomic, readonly) float x;
 /**
- Acceleration along Y axis in mili-G's
+ Acceleration along Y axis in G's
  */
-@property (nonatomic, readonly) int y;
+@property (nonatomic, readonly) float y;
 /**
- Acceleration along Z axis in mili-G's
+ Acceleration along Z axis in G's
  */
-@property (nonatomic, readonly) int z;
+@property (nonatomic, readonly) float z;
 
 /**
- RMS value of x, y, and z in mili-G's
+ RMS value of x, y, and z in G's
  */
-@property (nonatomic, readonly) int RMS;
+@property (nonatomic, readonly) float RMS;
 
 ///----------------------------------
 /// @name Deprecated Properties

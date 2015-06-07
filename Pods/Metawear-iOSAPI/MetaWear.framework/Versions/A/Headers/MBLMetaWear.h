@@ -38,6 +38,7 @@
 
 @class MBLTemperature;
 @class MBLAccelerometer;
+@class MBLGyro;
 @class MBLLED;
 @class MBLMechanicalSwitch;
 @class MBLGPIO;
@@ -48,12 +49,13 @@
 @class MBLANCS;
 @class MBLI2C;
 @class MBLTimer;
-
+@class MBLGSR;
+@class MBLBarometer;
 
 /**
  BLE transmiter power
  */
-typedef NS_OPTIONS(uint8_t, MBLTransmitPower) {
+typedef NS_ENUM(uint8_t, MBLTransmitPower) {
     MBLTransmitPower4dBm,
     MBLTransmitPower0dBm,
     MBLTransmitPowerMinus4dBm,
@@ -112,6 +114,10 @@ typedef NS_OPTIONS(uint8_t, MBLTransmitPower) {
  */
 @property (nonatomic, strong, readonly) MBLAccelerometer *accelerometer;
 /**
+ MBLGyro object contains all methods for interacting with the on-board gyroscope sensor
+ */
+@property (nonatomic, strong, readonly) MBLGyro *gyro;
+/**
  MBLGPIO object contains all methods for interacting with the on-board pins
  */
 @property (nonatomic, strong, readonly) MBLGPIO *gpio;
@@ -136,13 +142,22 @@ typedef NS_OPTIONS(uint8_t, MBLTransmitPower) {
  */
 @property (nonatomic, strong, readonly) MBLTimer *timer;
 /**
- + MBLTimer object contains all methods for performing raw I2C read/writes
- + */
+ MBLTimer object contains all methods for performing raw I2C read/writes
+ */
 @property (nonatomic, strong, readonly) MBLI2C *i2c;
+/**
+ MBLGSR object contains all methods for perfoming GSR reads
+ */
+@property (nonatomic, strong, readonly) MBLGSR *gsr;
+/**
+ MBLBarometer object contains all methods for interacting with the barometer sensor
+ */
+@property (nonatomic, strong, readonly) MBLBarometer *barometer;
 /**
  MBLDeviceInfo object contains version information about the device
  */
 @property (nonatomic, strong, readonly) MBLDeviceInfo *deviceInfo;
+
 
 ///----------------------------------
 /// @name Persistent Configuration Settings
@@ -196,6 +211,10 @@ typedef NS_OPTIONS(uint8_t, MBLTransmitPower) {
  result in a smaller connection radius, default is MBLTransmitPower0dBm.
  */
 @property (nonatomic) MBLTransmitPower transmitPower;
+/**
+ Set a raw value into the scan response BLE advertising packet
+ */
+@property (nonatomic, strong) NSData *scanResponse;
 
 ///----------------------------------
 /// @name Pairing/Bonding

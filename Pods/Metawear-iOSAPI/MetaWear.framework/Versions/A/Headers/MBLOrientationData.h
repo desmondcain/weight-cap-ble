@@ -33,9 +33,9 @@
  * contact MbientLab Inc, at www.mbientlab.com.
  */
 
-#import <MetaWear/MBLLogEntry.h>
+#import <MetaWear/MBLDataSample.h>
 
-typedef NS_OPTIONS(uint8_t, MBLAccelerometerOrientation) {
+typedef NS_ENUM(uint8_t, MBLAccelerometerOrientation) {
     MBLAccelerometerOrientationPortrait = 0,
     MBLAccelerometerOrientationPortraitUpsideDown = 1,
     MBLAccelerometerOrientationLandscapeRight = 2,
@@ -45,6 +45,6 @@ typedef NS_OPTIONS(uint8_t, MBLAccelerometerOrientation) {
 /**
  Container for orientation data
  */
-@interface MBLOrientationData : MBLLogEntry
+@interface MBLOrientationData : MBLDataSample
 @property (nonatomic) MBLAccelerometerOrientation orientation;
 @end

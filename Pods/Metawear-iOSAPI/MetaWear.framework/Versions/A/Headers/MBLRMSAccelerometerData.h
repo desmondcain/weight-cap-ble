@@ -33,14 +33,14 @@
  * contact MbientLab Inc, at www.mbientlab.com.
  */
 
-#import <MetaWear/MBLLogEntry.h>
+#import <MetaWear/MBLDataSample.h>
 
 /**
  Container for accelerometer RMS data
  */
-@interface MBLRMSAccelerometerData : MBLLogEntry
+@interface MBLRMSAccelerometerData : MBLDataSample
 /**
- RMS value of x, y, and z in mili-G's
+ RMS value of x, y, and z in G's
  */
-@property (nonatomic, readonly) int rms;
+@property (nonatomic, readonly) float rms;
 @end

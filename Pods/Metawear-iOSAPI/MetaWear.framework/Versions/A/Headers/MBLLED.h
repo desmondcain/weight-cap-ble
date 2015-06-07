@@ -39,7 +39,7 @@
 /**
  Specific color channel for the LED
  */
-typedef NS_OPTIONS(uint8_t, MBLLEDColorChannel) {
+typedef NS_ENUM(uint8_t, MBLLEDColorChannel) {
     MBLLEDColorChannelGreen = 0,
     MBLLEDColorChannelRed = 1,
     MBLLEDColorChannelBlue = 2
