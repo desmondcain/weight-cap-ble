@@ -67,32 +67,17 @@ class ViewController: UIViewController {
             accelerometer.fullScaleRange = MBLAccelerometerRange(rawValue: 2)!
             accelerometer.highPassCutoffFreq = MBLAccelerometerCutoffFreq(rawValue: 0)!
             accelerometer.highPassFilter = true
+            
+            // Sum the RMS data
+            let summedRMS = accelerometer.rmsDataReadyEvent.summationOfEvent()
+            
+            // Set logging interval
+            let periodicRMS = summedRMS.differentialSampleOfEvent(2000)
+            
+            periodicRMS.startNotificationsWithHandler() {
+                (obj, error) -> Void in println("RMS: \(obj)")
+            }
         }
-        
-//        self.device.accelerometer.dataReadyEvent.startNotificationsWithHandler() {
-//            (obj, error) -> Void in println("Raw Data: \(obj)")
-//        }
-        
-        // Sum the RMS data
-        let summedRMS = self.device.accelerometer.rmsDataReadyEvent.summationOfEvent()
-        
-        // Set logging interval
-        let periodicRMS = summedRMS.periodicSampleOfEvent(2000)
-        
-        periodicRMS.startNotificationsWithHandler() {
-            (obj, error) -> Void in println("RMS: \(obj)")
-        }
-        
-//        self.device.accelerometer.rmsDataReadyEvent.startNotificationsWithHandler() {
-//            (obj, error) -> Void in println("RMS: \(obj)")
-//        }
-
-        
-//        self.device.accelerometer.fullScaleRange = MBLAccelerometerRange8G;  // Default: +- 8G
-//        self.device.accelerometer.sampleFrequency = MBLAccelerometerSampleFrequency100 // Default: 100 Hz
-//        [device.accelerometer.dataReadyEvent startNotificationsWithHandler:^(MBLAccelerometerData *obj, NSError *error) {
-//            NSLog(@"X = %d, Y = %d, Z = %d", obj.x, obj.y, obj.z);
-//        }];
     }
     
     func getBatteryLife() {
@@ -103,9 +88,8 @@ class ViewController: UIViewController {
     
     func getAmbientTemp() {
         self.device.temperature.source = MBLTemperatureSource.Internal
-        self.device.temperature.units = MBLTemperatureUnit.Fahrenheit
-        self.device.temperature.readTemperatureWithHandler() {
-            (number, error) -> () in println("Temp: \(number)° F")
+        self.device.temperature.temperatureValue.readWithHandler() {
+            (number, error) -> () in println("Temp: \(number)° C")
         }
     }
     
